@@ -1,0 +1,218 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+   "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+<head>
+    <title>AbsTK</title>
+    <link rel="stylesheet" href="../ldoc.css" type="text/css" />
+</head>
+<body>
+
+<div id="container">
+
+<div id="product">
+	<div id="product_logo"></div>
+	<div id="product_name"><big><b></b></big></div>
+	<div id="product_description"></div>
+</div> <!-- id="product" -->
+
+
+<div id="main">
+
+
+<!-- Menu -->
+
+<div id="navigation">
+<br/>
+<h1>AbsTK</h1>
+
+<ul>
+  <li><a href="../index.html">Index</a></li>
+</ul>
+
+<h2>Contents</h2>
+<ul>
+<li><a href="#Getting_Started">Getting Started </a></li>
+<li><a href="#Contributing">Contributing </a></li>
+<li><a href="#License">License </a></li>
+</ul>
+
+
+<h2>Topics</h2>
+<ul class="">
+  <li><strong>README</strong></li>
+</ul>
+<h2>Modules</h2>
+<ul class="nowrap">
+  <li><a href="../modules/abstk.html">abstk</a></li>
+</ul>
+<h2>Classes</h2>
+<ul class="nowrap">
+  <li><a href="../classes/AbsCurses.html">AbsCurses</a></li>
+  <li><a href="../classes/AbsGtk.html">AbsGtk</a></li>
+  <li><a href="../classes/util.html">util</a></li>
+</ul>
+
+</div>
+
+<div id="content">
+
+
+<h1><a href="https://github.com/PedroAlvesV/AbsTK"><img src="src/images/abstk_logo.png?raw=true" alt="AbsTK"/></a></h1>
+
+<p><a href="https://gitter.im/AbsTK-Lua/Lobby?utm_source=badge&amp;utm_medium=badge&amp;utm_campaign=pr-badge&amp;utm_content=badge"><img src="https://badges.gitter.im/AbsTK-Lua/Lobby.svg" alt="Join the chat at https://gitter.im/AbsTK-Lua/Lobby"/></a>
+<a href="http://doge.mit-license.org"><img src="http://img.shields.io/:license-mit-blue.svg" alt="MIT License"/></a></p>
+
+<p>The Abstract ToolKit is a widget toolkit for GUI and text-mode applications. It allows you to, with the same source code, build an UI that runs on GUI (GTK) and text-mode (Curses).</p>
+
+<p><a href="src/big_image_source.lua"><img src="src/images/comparison.png" alt="AbsTK UI Comparison"/></a></p>
+
+<p><a name="Getting_Started"></a></p>
+<h2>Getting Started</h2>
+
+<h3>Installation</h3>
+
+<p>The easiest way to install AbsTK is through <a href="https://github.com/luarocks/luarocks">LuaRocks</a>:</p>
+
+<pre><code> $ luarocks install abstk
+</code></pre>
+
+
+<h3>Concepts</h3>
+
+
+<p align="justify">AbsTK goal is producing wizard-like applications that can run with and without a desktop environment (DE). It's worth it for machines that doesn't have any DE installed, but, also, for instance, installers in which you may prefer a light-weight text-mode (curses) interface, instead of using GUI.</p>
+
+
+<p align="justify">Although the toolkit focus is on building Wizards, individual Screens can also be produced. Actually, building Screens is the main part of building a Wizard. Wizards are no much more than a group of ordered Screens.</p>
+
+
+<p align="justify">The routine is really minimalistic, but, as stated in the previous paragraph, has two ways. To create a Screen, you initialize it and populate it with widgets. If your UI is a single Screen, just run it. If it's a Wizard, repeat the first process to produce all the Screens. When done, simply create the Wizard, populate it with the Screens and run the Wizard.</p>
+
+
+<p align="justify">About widgets, its construction functions are quite similar to one another in terms of parameters. Also, there's an important naming pattern: if the widget is a single object (like a button), its construction function name will start with "add", like <code>add_button()</code>. Otherwise, if the widget is, actually, a group of objets (like a button box), its construction function will start with "create", like <code>create_button_box()</code>.</p>
+
+
+<p>You can check API reference at <a href="https://pedroalvesv.github.io/AbsTK/">https://pedroalvesv.github.io/AbsTK/</a>.</p>
+
+<h3>Usage</h3>
+
+<p>There are two lines that you will put on the top of most of your codes that use AbsTK:</p>
+
+
+<pre>
+<span class="keyword">local</span> abstk = <span class="global">require</span> <span class="string">'abstk'</span>
+abstk.set_mode(...)
+</pre>
+
+
+
+<p align="justify">The first one is pretty obvious, it's just the usual lib requirement. The second one is not, actually, necessary, but you'll probably want to use it to, manually, set in which mode the UI will run and see how it looks like. This line gets the args passed when running the application. Like:</p>
+
+
+<pre><code> $ lua minimalist-test.lua curses
+</code></pre>
+
+
+
+<p align="justify">All it accepts is "curses" and "gtk", because it's not the kind of thing that should be on the final version of your code. When nothing is passed, the toolkit decides which one to use based on <code>os.getenv("DISPLAY")</code> returning value. If it returns something, the OS runs in a GUI, so AbsTK runs in GUI as well. Otherwise, it runs in text-mode.</p>
+
+
+<h3>Examples</h3>
+
+<h4>Screen</h4>
+
+
+<pre>
+<span class="keyword">local</span> abstk = <span class="global">require</span> <span class="string">'abstk'</span>
+<span class="keyword">local</span> scr = abstk.new_screen(<span class="string">"My First AbsTK UI"</span>)
+scr:add_image(<span class="string">'logo'</span>, <span class="string">'images/abstk_logo.png'</span>)
+scr:add_label(<span class="string">'hellow'</span>, <span class="string">"Hello, World!"</span>)
+scr:add_label(<span class="string">'msg1'</span>, <span class="string">"This is a minimal example to demonstrate AbsTK."</span>)
+scr:add_label(<span class="string">'msg2'</span>, <span class="string">"The Screen is the main object of the toolkit. It can run as standalone or added to a Wizard. Its routine consists in creating it (line 2), populating it (lines 3 to 7) and running it (line 8)."</span>)
+scr:run()
+</pre>
+
+
+<p><a href="src/example1.lua"><img src="src/images/examples/example1.png" alt="Screen UI Example"/></a></p>
+
+<h4>Wizard</h4>
+
+
+<pre>
+<span class="keyword">local</span> abstk = <span class="global">require</span> <span class="string">'abstk'</span>
+<span class="keyword">local</span> wizard = abstk.new_wizard(<span class="string">"My First AbsTK Wizard"</span>)
+<span class="keyword">local</span> scr1 = abstk.new_screen(<span class="string">"Page 1"</span>)
+<span class="keyword">local</span> scr2 = abstk.new_screen(<span class="string">"Page 2"</span>)
+<span class="keyword">local</span> scr3 = abstk.new_screen(<span class="string">"Page 3"</span>)
+scr1:add_image(<span class="string">'logo'</span>, <span class="string">'images/abstk_logo.png'</span>)
+scr1:add_label(<span class="string">'hellow'</span>, <span class="string">"Hello, World!"</span>)
+scr1:add_label(<span class="string">'msg1'</span>, <span class="string">"This is a minimal example to demonstrate AbsTK."</span>)
+scr2:add_image(<span class="string">'logo'</span>, <span class="string">'images/abstk_logo.png'</span>)
+scr2:add_label(<span class="string">'msg2'</span>, <span class="string">"The Wizard is what AbsTK was firstly developed. Instead of running Screens, it insert them into an assistant-like interface.Its routine consists on creating it (line 2), creating screens (lines 3 to 5), populating the screens (lines 6 to 12), adding screens to wizard (lines 13 to 15) and running the wizard (line 16)."</span>)
+scr3:add_image(<span class="string">'logo'</span>, <span class="string">'images/abstk_logo.png'</span>)
+scr3:add_label(<span class="string">'thanks_label'</span>, <span class="string">"Thank you &lt;3"</span>)
+wizard:add_page(<span class="string">'page1'</span>, scr1)
+wizard:add_page(<span class="string">'page2'</span>, scr2)
+wizard:add_page(<span class="string">'page3'</span>, scr3)
+wizard:run()
+</pre>
+
+
+<p><a href="src/example2.lua"><img src="src/images/examples/example2.gif" alt="Wizard UI Example"/></a></p>
+
+<p>You can see a more examples at <a href="https://github.com/PedroAlvesV/AbsTK/wiki/Examples">wiki/Examples</a>.</p>
+
+<p><a name="Contributing"></a></p>
+<h2>Contributing</h2>
+
+<ol>
+    <li>Create an issue and describe your contribution</li>
+    <li><a href="https://github.com/PedroAlvesV/AbsTK/fork">Fork it</a></li>
+    <li>Create a new branch for your contribution (<code>git checkout -b my-contribution</code>)</li>
+    <li>Commit your changes (<code>git commit -am &apos;New feature added&apos;</code>)</li>
+    <li>Publish the branch (<code>git push origin my-contribution</code>)</li>
+    <li>Create a Pull Request</li>
+    <li>Done :white<em>check</em>mark:</li>
+</ol>
+
+<p><a name="License"></a></p>
+<h2>License</h2>
+
+<p>The MIT License (MIT)</p>
+
+<p>Copyright (c) 2017 Pedro Alves Valentim</p>
+
+
+<p align="justify">Permission is hereby granted, free of charge, to any person obtaining a copy of
+this software and associated documentation files (the "Software"), to deal in
+the Software without restriction, including without limitation the rights to
+use, copy, modify, merge, publish, distribute, sublicense, and/or sell copies of
+the Software, and to permit persons to whom the Software is furnished to do so,
+subject to the following conditions:</p>
+
+
+
+<p align="justify">The above copyright notice and this permission notice shall be included in all
+copies or substantial portions of the Software.</p>
+
+
+
+<p align="justify">THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR
+IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS
+FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR
+COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER
+IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN
+CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.</p>
+
+
+
+</div> <!-- id="content" -->
+</div> <!-- id="main" -->
+<div id="about">
+<i>generated by <a href="http://github.com/stevedonovan/LDoc">LDoc 1.4.6</a></i>
+<i style="float:right;">Last updated 2017-04-06 15:36:58 </i>
+</div> <!-- id="about" -->
+</div> <!-- id="container" -->
+</body>
+</html>
